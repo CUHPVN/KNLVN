@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95e8b671b0c1ea449903bbc2122e033b, type: 3}
+  m_Name: GameVisualConfig
+  m_EditorClassIdentifier: Assembly-CSharp::KNLVN.Game.GameVisualConfig
+  WallSprite: {fileID: 8350197334578242565, guid: c6e387162cdac324d833ec6660f5d792, type: 3}
+  EmptySprite: {fileID: -8755219989183515707, guid: cd65702630838554fb467f711c0fb1c5, type: 3}
+  BlueSprite: {fileID: 5606932991186246490, guid: f0222175aca943f46b73fca564745e75, type: 3}
+  YellowSprite: {fileID: -3032914584617769120, guid: 037646685f5f6404481f0fe79d7d403a, type: 3}
+  StarSprite: {fileID: -2866961925152162486, guid: 3336b4877df2c17459a3214232386ce5, type: 3}
+  RedLockedSprite: {fileID: -930239667975947347, guid: 446658f5113dbc241996eb2fa74572e6, type: 3}
+  RedOpenSprite: {fileID: -3997056024156319402, guid: 47e901dc94ff36546848f28672d40860, type: 3}
+  ContentPanelSprite: {fileID: 1944279100, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
+  FloorTokenSprite: {fileID: 246295732, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
+  FloorTileSprite: {fileID: -8755219989183515707, guid: cd65702630838554fb467f711c0fb1c5, type: 3}
+  HeldBubbleSprite: {fileID: -2055814035, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
+  PlayerBodySprite: {fileID: 4298630949540599605, guid: 416a16eaae8bbbe449c150a842b947f7, type: 3}
+  FacingMarkerSprite: {fileID: 1731633923, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
+  WallColor: {r: 0.22, g: 0.22, b: 0.25, a: 1}
+  EmptyColor: {r: 1, g: 1, b: 1, a: 0}
+  BlueColor: {r: 0.27, g: 0.52, b: 0.9, a: 1}
+  YellowColor: {r: 0.98, g: 0.84, b: 0.2, a: 1}
+  StarColor: {r: 1, g: 0.72, b: 0.1, a: 1}
+  RedLockColor: {r: 0.85, g: 0.22, b: 0.22, a: 1}
+  RedOpenColor: {r: 0.22, g: 0.8, b: 0.22, a: 1}
+  PlayerColor: {r: 1, g: 1, b: 1, a: 1}
+  HeldBubbleColor: {r: 0.2, g: 0.8, b: 1, a: 1}
+  ContentPanelColor: {r: 1, g: 1, b: 1, a: 0}
+  FloorTokenColor: {r: 1, g: 0.85566986, b: 0, a: 1}
+  FacingMarkerColor: {r: 1, g: 0.9, b: 0.3, a: 0.75}
+  HintArrowColor: {r: 1, g: 0.9, b: 0.2, a: 0.9}
+  PlayerBodyScale: 0.8
+  BubbleOffsetY: 0.75
+  BubbleScale: 1
+  HeldLabelCharSize: 0.08
+  ContentPanelScale: 0.9
+  ContentLabelCharSize: 0.09
+  FloorTokenScale: 0.7
+  FloorLabelCharSize: 0.09
+  LabelFontSize: 100
+  MoveDuration: 0.12
+  MoveCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

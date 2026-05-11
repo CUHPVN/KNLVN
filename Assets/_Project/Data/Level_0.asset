@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f2ae05f64e2c9445b97dd57bdbd2874, type: 3}
+  m_Name: Level_0
+  m_EditorClassIdentifier: Assembly-CSharp::KNLVN.Game.LevelData
+  Width: 11
+  Height: 9
+  PlayerStartPos: {x: 1, y: 1}
+  Cells:
+  - Pos: {x: 3, y: 4}
+    Type: 2
+    Content: 9
+  - Pos: {x: 2, y: 4}
+    Type: 3
+    Content: 0
+  - Pos: {x: 4, y: 4}
+    Type: 2
+    Content: +
+  - Pos: {x: 5, y: 4}
+    Type: 3
+    Content: 
+  - Pos: {x: 6, y: 4}
+    Type: 2
+    Content: =
+  - Pos: {x: 7, y: 4}
+    Type: 3
+    Content: 
+  - Pos: {x: 8, y: 4}
+    Type: 3
+    Content: 
+  - Pos: {x: 8, y: 4}
+    Type: 3
+    Content: 
+  - Pos: {x: 10, y: 4}
+    Type: 4
+    Content: 
+  - Pos: {x: 2, y: 2}
+    Type: 0
+    Content: 3
+  - Pos: {x: 4, y: 2}
+    Type: 0
+    Content: 1
+  - Pos: {x: 6, y: 2}
+    Type: 0
+    Content: 2
+  - Pos: {x: 4, y: 6}
+    Type: 5
+    Content: 6
+  - Pos: {x: 8, y: 2}
+    Type: 3
+    Content: +
