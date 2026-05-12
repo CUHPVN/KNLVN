@@ -18,8 +18,6 @@ namespace KNLVN.Game
         private void Awake()
         {
             // EventBus must exist before any subscriber Awake runs.
-            // Add EventBus as a MonoBehaviour component and assign it here,
-            // or create it programmatically:
             if (_eventBus == null)
                 _eventBus = gameObject.AddComponent<EventBusComponent>();
 
@@ -29,17 +27,25 @@ namespace KNLVN.Game
         private void OnEnable()
         {
             _eventBus?.Subscribe<DoorEnteredEvent>(OnDoorEntered);
+            _eventBus?.Subscribe<AllLevelsCompleteEvent>(OnAllLevelsComplete);
         }
 
         private void OnDisable()
         {
             _eventBus?.Unsubscribe<DoorEnteredEvent>(OnDoorEntered);
+            _eventBus?.Unsubscribe<AllLevelsCompleteEvent>(OnAllLevelsComplete);
         }
 
         private void OnDoorEntered(DoorEnteredEvent evt)
         {
-            Debug.Log("[GameManager] Player entered door — level complete!");
-            // TODO: show win screen / load next level
+            Debug.Log($"[GameManager] Level {_levelManager.CurrentLevelIndex} complete! Loading next...");
+            _levelManager.LoadNextLevel();
+        }
+
+        private void OnAllLevelsComplete(AllLevelsCompleteEvent evt)
+        {
+            Debug.Log($"[GameManager] All {evt.TotalLevels} levels complete! Show win screen.");
+            // TODO: show win / credits screen
         }
     }
 }

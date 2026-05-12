@@ -32,6 +32,10 @@ namespace KNLVN.Game
         private DoorController     _door;
         private UndoSystem         _undo;
 
+        // Tracks whether the equation was valid on the previous evaluation,
+        // so EquationSolvedEvent fires only on the valid→invalid→valid transition.
+        private bool _lastEquationValid = false;
+
         // ─── Input repeat throttling ──────────────────────────────────────────
         private float _moveRepeatTimer;
         private const float MoveRepeatDelay    = 0.18f;
@@ -70,6 +74,7 @@ namespace KNLVN.Game
             _door              = new DoorController(_eventBus);
 
             _undo.Clear();
+            _lastEquationValid = false;
             RefreshEquation();
         }
 
@@ -287,9 +292,20 @@ namespace KNLVN.Game
 
         private void RefreshEquation()
         {
-            bool valid = _evaluator.Evaluate();
-            _door.ApplyEquationResult(valid);
-            _eventBus?.Publish(new EquationChangedEvent { IsValid = valid });
+            var result = _evaluator.Evaluate();
+            _door.ApplyEquationResult(result.IsValid);
+            _eventBus?.Publish(new EquationChangedEvent { IsValid = result.IsValid });
+
+            // Fire celebration event only on the FIRST frame the equation becomes valid
+            if (result.IsValid && !_lastEquationValid && result.ChainPositions != null)
+            {
+                _eventBus?.Publish(new EquationSolvedEvent
+                {
+                    EquationText   = result.EquationText,
+                    ChainPositions = result.ChainPositions,
+                });
+            }
+            _lastEquationValid = result.IsValid;
         }
     }
 }

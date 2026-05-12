@@ -30,10 +30,11 @@ namespace KNLVN.Game
         private Sprite _floorTokenSprite;
 
         // ─── Cached handlers ──────────────────────────────────────────────────
-        private System.Action<PlayerMovedEvent>   _onPlayerMoved;
-        private System.Action<UndoPerformedEvent> _onUndoPerformed;
-        private System.Action<LevelLoadedEvent>   _onLevelLoaded;
-        private System.Action<LevelResetEvent>    _onLevelReset;
+        private System.Action<PlayerMovedEvent>    _onPlayerMoved;
+        private System.Action<UndoPerformedEvent>  _onUndoPerformed;
+        private System.Action<LevelLoadedEvent>    _onLevelLoaded;
+        private System.Action<LevelResetEvent>     _onLevelReset;
+        private System.Action<EquationSolvedEvent> _onEquationSolved;
 
         // ─── Unity lifecycle ──────────────────────────────────────────────────
 
@@ -54,6 +55,7 @@ namespace KNLVN.Game
             };
             _onLevelLoaded   = _ => RebuildViews();
             _onLevelReset    = _ => RebuildViews();
+            _onEquationSolved = evt => BounceChain(evt.ChainPositions);
         }
 
         private void OnEnable()
@@ -62,6 +64,7 @@ namespace KNLVN.Game
             _eventBus?.Subscribe(_onUndoPerformed);
             _eventBus?.Subscribe(_onLevelLoaded);
             _eventBus?.Subscribe(_onLevelReset);
+            _eventBus?.Subscribe(_onEquationSolved);
         }
 
         private void OnDisable()
@@ -70,6 +73,7 @@ namespace KNLVN.Game
             _eventBus?.Unsubscribe(_onUndoPerformed);
             _eventBus?.Unsubscribe(_onLevelLoaded);
             _eventBus?.Unsubscribe(_onLevelReset);
+            _eventBus?.Unsubscribe(_onEquationSolved);
         }
 
         // ─── Build ────────────────────────────────────────────────────────────
@@ -189,6 +193,30 @@ namespace KNLVN.Game
             // Teleport view to the "from" position, then animate to "to"
             view.transform.position = worldFrom;
             view.AnimatePush(worldFrom, worldTo);
+        }
+
+        // ─── Bounce (equation solved) ─────────────────────────────────────────
+
+        /// <summary>
+        /// Triggers a staggered bounce on every CellView in the solved chain.
+        /// Cells pop one after another (wave effect) with a 0.05 s stagger.
+        /// </summary>
+        private void BounceChain(System.Collections.Generic.List<Vector2Int> positions)
+        {
+            if (positions == null) return;
+            var grid = _levelManager?.Grid;
+            if (grid == null) return;
+
+            int   h       = grid.Height;
+            float stagger = 0.05f;
+
+            for (int i = 0; i < positions.Count; i++)
+            {
+                var pos   = positions[i];
+                int index = pos.x * h + pos.y;
+                if (index < 0 || index >= _cellViews.Count) continue;
+                _cellViews[index].PlayBounce(delay: i * stagger);
+            }
         }
     }
 }

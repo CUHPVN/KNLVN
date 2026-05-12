@@ -25,5 +25,6 @@ public enum PoolType
 {
     None=0,
     SlotStopVFX=1,
+    EquationPopup=2,
     //Add 
 }

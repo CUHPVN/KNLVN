@@ -126,6 +126,9 @@ namespace KNLVN.Game
         // ─── Font settings (shared) ───────────────────────────────────────────
 
         [Header("TextMesh Font (shared by all labels)")]
+        [Tooltip("Custom font asset for all number/operator labels. Leave null = Unity default Arial.")]
+        public Font LabelFont;
+
         [Tooltip("Bitmap resolution of the font. Higher = sharper text. Keep at 100 to avoid blur.")]
         public int LabelFontSize = 100;
 

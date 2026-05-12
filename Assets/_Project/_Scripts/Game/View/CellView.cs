@@ -20,16 +20,23 @@ namespace KNLVN.Game
         private GameVisualConfig _cfg;
         private bool             _doorOpen;
 
-        // ─── Visual refs ──────────────────────────────────────────────────────
         private SpriteRenderer _bgSprite;
         private SpriteRenderer _contentPanel;
         private TextMesh       _contentLabel;
         private SpriteRenderer _floorToken;
         private TextMesh       _floorLabel;
+        private Vector3        _originalScale; // Cached to prevent "growth bug" on spam
 
-        // ─── Push animation ───────────────────────────────────────────────────
+
+        // ─── Push / Bounce animation ──────────────────────────────────────────
         // Duration and curve are driven by GameVisualConfig (assigned in Init).
         private Coroutine _pushCoroutine;
+        private Coroutine _bounceCoroutine;
+
+        // ─── Door event handlers (cached so we can unsubscribe on Destroy) ────
+        private EventBusComponent              _bus;
+        private System.Action<DoorOpenedEvent> _onDoorOpened;
+        private System.Action<DoorClosedEvent> _onDoorClosed;
 
 
         // ─── Unity lifecycle ──────────────────────────────────────────────────
@@ -43,11 +50,16 @@ namespace KNLVN.Game
 
         private void OnDisable()
         {
-            if (_pushCoroutine != null)
-            {
-                StopCoroutine(_pushCoroutine);
-                _pushCoroutine = null;
-            }
+            if (_pushCoroutine   != null) { StopCoroutine(_pushCoroutine);   _pushCoroutine   = null; }
+            if (_bounceCoroutine != null) { StopCoroutine(_bounceCoroutine); _bounceCoroutine = null; }
+        }
+
+        private void OnDestroy()
+        {
+            // IMPORTANT: unsubscribe door handlers so the EventBus does not
+            // hold dead references after this cell is destroyed (e.g. level load).
+            _bus?.Unsubscribe(_onDoorOpened);
+            _bus?.Unsubscribe(_onDoorClosed);
         }
 
         // ─── Init ─────────────────────────────────────────────────────────────
@@ -64,6 +76,8 @@ namespace KNLVN.Game
             _grid = grid;
             _cfg  = cfg;   // must be set BEFORE Build helpers
 
+            _originalScale = transform.localScale;
+
             BuildContentPanel();
             BuildFloorToken();
 
@@ -71,9 +85,12 @@ namespace KNLVN.Game
             _contentPanel.sprite = contentPanelSprite;
             _floorToken.sprite   = floorTokenSprite;
 
-            // Only subscribe to door events — infrequent, cell-specific
-            bus?.Subscribe<DoorOpenedEvent>(_ => { _doorOpen = true;  Refresh(); });
-            bus?.Subscribe<DoorClosedEvent>(_ => { _doorOpen = false; Refresh(); });
+            // Cache bus ref + handlers so we can unsubscribe on Destroy
+            _bus          = bus;
+            _onDoorOpened = _ => { _doorOpen = true;  Refresh(); };
+            _onDoorClosed = _ => { _doorOpen = false; Refresh(); };
+            bus?.Subscribe(_onDoorOpened);
+            bus?.Subscribe(_onDoorClosed);
 
             Refresh();
         }
@@ -118,7 +135,10 @@ namespace KNLVN.Game
         public void AnimatePush(Vector3 from, Vector3 to)
         {
             if (_pushCoroutine != null)
+            {
                 StopCoroutine(_pushCoroutine);
+                transform.position = to; // Force to target position if interrupted
+            }
 
             _pushCoroutine = StartCoroutine(PushRoutine(from, to));
         }
@@ -149,6 +169,7 @@ namespace KNLVN.Game
             float charSize = _cfg != null ? _cfg.ContentLabelCharSize  : 0.154f;
             int   fontSize = _cfg != null ? _cfg.LabelFontSize         : 100;
             Color panelClr = _cfg != null ? _cfg.ContentPanelColor     : new Color(1f, 1f, 1f, 0.92f);
+            Font  font     = _cfg?.LabelFont;
 
             var go = new GameObject("ContentPanel");
             go.transform.SetParent(transform, false);
@@ -163,12 +184,14 @@ namespace KNLVN.Game
             lbl.transform.SetParent(go.transform, false);
             lbl.transform.localPosition = new Vector3(0f, 0f, -0.1f);
             _contentLabel               = lbl.AddComponent<TextMesh>();
+            if (font != null) _contentLabel.font = font;
             _contentLabel.characterSize = charSize;
             _contentLabel.fontSize      = fontSize;
             _contentLabel.anchor        = TextAnchor.MiddleCenter;
             _contentLabel.alignment     = TextAlignment.Center;
             _contentLabel.color         = Color.white;
             _contentLabel.fontStyle     = FontStyle.Bold;
+            if (font != null) lbl.GetComponent<MeshRenderer>().material = font.material;
             lbl.GetComponent<MeshRenderer>().sortingOrder = 2;
 
             go.SetActive(false);
@@ -180,6 +203,7 @@ namespace KNLVN.Game
             float charSize = _cfg != null ? _cfg.FloorLabelCharSize  : 0.168f;
             int   fontSize = _cfg != null ? _cfg.LabelFontSize       : 100;
             Color tokenClr = _cfg != null ? _cfg.FloorTokenColor     : new Color(0.95f, 0.75f, 0.20f);
+            Font  font     = _cfg?.LabelFont;
 
             var go = new GameObject("FloorToken");
             go.transform.SetParent(transform, false);
@@ -194,15 +218,57 @@ namespace KNLVN.Game
             lbl.transform.SetParent(go.transform, false);
             lbl.transform.localPosition = new Vector3(0f, 0f, -0.1f);
             _floorLabel               = lbl.AddComponent<TextMesh>();
+            if (font != null) _floorLabel.font = font;
             _floorLabel.characterSize = charSize;
             _floorLabel.fontSize      = fontSize;
             _floorLabel.anchor        = TextAnchor.MiddleCenter;
             _floorLabel.alignment     = TextAlignment.Center;
             _floorLabel.color         = Color.white;
             _floorLabel.fontStyle     = FontStyle.Bold;
+            if (font != null) lbl.GetComponent<MeshRenderer>().material = font.material;
             lbl.GetComponent<MeshRenderer>().sortingOrder = 4;
 
             go.SetActive(false);
+        }
+
+        // ─── Bounce animation (equation solved) ───────────────────────────────
+
+        /// <summary>
+        /// Plays a pop/bounce scale animation on this cell.
+        /// Called by GridView when EquationSolvedEvent is received.
+        /// </summary>
+        public void PlayBounce(float delay = 0f)
+        {
+            // IMPORTANT: If a previous bounce was running, stop it AND 
+            // force scale back to original immediately before starting the next one.
+            if (_bounceCoroutine != null)
+            {
+                StopCoroutine(_bounceCoroutine);
+                transform.localScale = _originalScale;
+            }
+            _bounceCoroutine = StartCoroutine(BounceRoutine(delay));
+        }
+
+        private IEnumerator BounceRoutine(float delay)
+        {
+            if (delay > 0f) yield return new WaitForSeconds(delay);
+
+            Vector3 startScale = _originalScale;
+            const float duration = 0.4f;
+            float elapsed = 0f;
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float t     = elapsed / duration;
+                // sin curve: peaks at t=0.5, returns to 1 at t=1
+                float scale = 1f + 0.35f * Mathf.Sin(t * Mathf.PI);
+                transform.localScale = startScale * scale;
+                yield return null;
+            }
+
+            transform.localScale = startScale;
+            _bounceCoroutine     = null;
         }
     }
 }

@@ -9,9 +9,17 @@ namespace KNLVN.Game
     public struct LevelLoadedEvent
     {
         public LevelData Data;
+        /// <summary>Zero-based index in the LevelManager playlist.</summary>
+        public int LevelIndex;
     }
 
     public struct LevelResetEvent { }
+
+    /// <summary>Fired when <see cref="LevelManager.LoadNextLevel"/> is called on the last level.</summary>
+    public struct AllLevelsCompleteEvent
+    {
+        public int TotalLevels;
+    }
 
     // ── Equation ──────────────────────────────────────────────────────────────
 
@@ -20,6 +28,19 @@ namespace KNLVN.Game
     {
         /// <summary>True when the equation is currently valid (door opens).</summary>
         public bool IsValid;
+    }
+
+    /// <summary>
+    /// Fired ONCE when the equation first becomes valid (not re-fired while it stays valid).
+    /// Carries the equation string and the grid positions of every cell in the chain,
+    /// so the view layer can play celebration animations.
+    /// </summary>
+    public struct EquationSolvedEvent
+    {
+        /// <summary>Human-readable equation, e.g. "2 + 3 = 5".</summary>
+        public string EquationText;
+        /// <summary>Grid positions of every cell in the solved chain.</summary>
+        public System.Collections.Generic.List<UnityEngine.Vector2Int> ChainPositions;
     }
 
     // ── Door ──────────────────────────────────────────────────────────────────

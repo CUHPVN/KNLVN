@@ -21,41 +21,45 @@ namespace KNLVN.Game
 
         public EquationEvaluator(GameGrid grid) => _grid = grid;
 
+        // ─── Result type ──────────────────────────────────────────────────────
+
+        public struct EvaluationResult
+        {
+            public bool                IsValid;
+            public string              EquationText;   // e.g. "2 + 3 = 5"
+            public List<Vector2Int>    ChainPositions; // null when invalid
+
+            public static EvaluationResult Fail() =>
+                new EvaluationResult { IsValid = false, EquationText = string.Empty, ChainPositions = null };
+        }
+
         // ─── Public API ───────────────────────────────────────────────────────
 
         /// <summary>
         /// Evaluates the current grid state.
-        /// Returns true if a valid, correct equation is formed.
+        /// Returns a result with IsValid=true if a valid, correct equation is formed.
         /// </summary>
-        public bool Evaluate()
+        public EvaluationResult Evaluate()
         {
             var blueCells = _grid.GetBlueCells();
-            if (blueCells.Count == 0) return false;
+            if (blueCells.Count == 0) return EvaluationResult.Fail();
 
             // 1. All blue cells must be on the same row or column
             bool sameRow    = AllSameRow(blueCells);
             bool sameColumn = AllSameColumn(blueCells);
 
-            if (!sameRow && !sameColumn)
-            {
-                Debug.Log("[Evaluator] Blue cells are not aligned on a single axis.");
-                return false;
-            }
+            if (!sameRow && !sameColumn) return EvaluationResult.Fail();
 
             // 2. Build the contiguous chain along the detected axis
             List<GameGridCell> chain = sameRow
                 ? BuildHorizontalChain(blueCells)
                 : BuildVerticalChain(blueCells);
 
-            if (chain == null)
-            {
-                Debug.Log("[Evaluator] Chain could not be formed (Blue cells not contiguous).");
-                return false;
-            }
+            if (chain == null) return EvaluationResult.Fail();
 
             // 3. Validate chain contains all blue cells
             foreach (var blue in blueCells)
-                if (!chain.Contains(blue)) return false;
+                if (!chain.Contains(blue)) return EvaluationResult.Fail();
 
             // 4. Tokenise + merge digits
             var tokens = NumberMerger.Merge(chain);
@@ -66,22 +70,29 @@ namespace KNLVN.Game
             {
                 if (tokens[i].IsEquals) { eqCount++; eqIndex = i; }
             }
-            if (eqCount != 1)
-            {
-                Debug.Log($"[Evaluator] Invalid — {eqCount} '=' tokens (need exactly 1).");
-                return false;
-            }
+            if (eqCount != 1) return EvaluationResult.Fail();
 
             // 6. Split and evaluate
             var left  = tokens.GetRange(0, eqIndex);
             var right = tokens.GetRange(eqIndex + 1, tokens.Count - eqIndex - 1);
 
-            if (!TryCalculate(left,  out long lVal)) return false;
-            if (!TryCalculate(right, out long rVal)) return false;
+            if (!TryCalculate(left,  out long lVal)) return EvaluationResult.Fail();
+            if (!TryCalculate(right, out long rVal)) return EvaluationResult.Fail();
 
-            bool valid = lVal == rVal;
-            Debug.Log($"[Evaluator] {TokensToString(left)} = {TokensToString(right)} → {lVal} == {rVal} : {valid}");
-            return valid;
+            bool   valid  = lVal == rVal;
+            string eqText = $"{TokensToString(left)} = {TokensToString(right)}";
+
+            var positions = new List<Vector2Int>(chain.Count);
+            foreach (var c in chain) positions.Add(c.GridPos);
+
+            GameDebug.Log($"[Evaluator] {eqText} → {lVal} == {rVal} : {valid}");
+
+            return new EvaluationResult
+            {
+                IsValid        = valid,
+                EquationText   = eqText,
+                ChainPositions = positions,
+            };
         }
 
         // ─── Chain building ───────────────────────────────────────────────────
@@ -192,20 +203,24 @@ namespace KNLVN.Game
 
         // ─── Helpers ──────────────────────────────────────────────────────────
 
-        /// <summary>A cell "has content" in an equation context if it's Blue, Yellow/Star with value, or a floor-item.</summary>
+        /// <summary>
+        /// A cell "has content" in an equation context if it's a Blue slot or a
+        /// Pushable box (Yellow / Star) that carries a value.
+        /// Empty cells with floor items are intentionally excluded — loose numbers
+        /// on the floor must be picked up and placed into a box/slot to count.
+        /// </summary>
         private static bool HasContent(GameGridCell cell)
         {
-            if (cell.IsBlue)   return !cell.Content.IsEmpty;
+            if (cell.IsBlue)     return !cell.Content.IsEmpty;
             if (cell.IsPushable) return !cell.Content.IsEmpty;
-            if (cell.IsEmpty && cell.HasFloorItem) return true; // loose items also count
             return false;
         }
 
         private static CellContent GetEffectiveContent(GameGridCell cell)
         {
-            if (cell.IsBlue || cell.IsPushable) return cell.Content;
-            if (cell.HasFloorItem)              return cell.FloorItem;
-            return CellContent.Empty;
+            // Only Blue and Pushable cells are ever in the chain now;
+            // floor items on Empty cells are excluded by HasContent().
+            return (cell.IsBlue || cell.IsPushable) ? cell.Content : CellContent.Empty;
         }
 
         private static bool AllSameRow(List<GameGridCell> cells)

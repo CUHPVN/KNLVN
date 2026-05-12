@@ -478,6 +478,7 @@ GameObject:
   - component: {fileID: 1739647056}
   - component: {fileID: 1739647055}
   - component: {fileID: 1739647054}
+  - component: {fileID: 1739647058}
   m_Layer: 0
   m_Name: -Manager-
   m_TagString: Untagged
@@ -509,9 +510,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c074a8c912bb64246b0efd785aa5f5a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KNLVN.Game.LevelManager
-  _cellSize: 1
+  _levels:
+  - {fileID: 11400000, guid: 1b4585ca87e1b6c40aca9930920adb40, type: 2}
+  - {fileID: 11400000, guid: ba937c8749cee3a458a63acfd6310400, type: 2}
+  - {fileID: 11400000, guid: 0fcc353f238fed54387b6b0d8cf4e8c9, type: 2}
+  - {fileID: 11400000, guid: d55f778d540fab34f84fabc630dd58f7, type: 2}
+  - {fileID: 11400000, guid: 9e9131306d7f62f4ea8e1a3d7a1a0cc8, type: 2}
   _showDebugGrid: 0
-  _levelData: {fileID: 11400000, guid: 1b4585ca87e1b6c40aca9930920adb40, type: 2}
+  _cellSize: 1
   _eventBus: {fileID: 1739647054}
 --- !u!114 &1739647056
 MonoBehaviour:
@@ -542,6 +548,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1739647058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1739647053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c417e68ef80efda449ecffe6af150a89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PoolControler
+  poolAmounts:
+  - prefab: {fileID: 6168462373854108177, guid: 4e00fec20f68efc40a4d0ca59729a04f, type: 3}
+    parent: {fileID: 1739647057}
+    amount: 5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

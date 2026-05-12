@@ -20,20 +20,44 @@ MonoBehaviour:
   RedLockedSprite: {fileID: -930239667975947347, guid: 446658f5113dbc241996eb2fa74572e6, type: 3}
   RedOpenSprite: {fileID: -3997056024156319402, guid: 47e901dc94ff36546848f28672d40860, type: 3}
   ContentPanelSprite: {fileID: 1944279100, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
-  FloorTokenSprite: {fileID: 246295732, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
+  FloorTokenSprite: {fileID: 1731633923, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
   FloorTileSprite: {fileID: -8755219989183515707, guid: cd65702630838554fb467f711c0fb1c5, type: 3}
   HeldBubbleSprite: {fileID: -2055814035, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
   PlayerBodySprite: {fileID: 4298630949540599605, guid: 416a16eaae8bbbe449c150a842b947f7, type: 3}
+  PlayerSpriteDown: {fileID: -1167563988, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
+  PlayerSpriteUp: {fileID: -1884439686, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
+  PlayerSpriteLeft: {fileID: -2057669581, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
+  PlayerSpriteRight: {fileID: -432938143, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
   FacingMarkerSprite: {fileID: 1731633923, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
-  WallColor: {r: 0.22, g: 0.22, b: 0.25, a: 1}
+  WalkFramesDown:
+  - {fileID: -1167563988, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
+  - {fileID: 2013635603, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
+  - {fileID: 420862021, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
+  - {fileID: -1167563988, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
+  WalkFramesUp:
+  - {fileID: -1884439686, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
+  - {fileID: 204219464, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
+  - {fileID: 1490362633, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
+  - {fileID: -1884439686, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
+  WalkFramesLeft:
+  - {fileID: -2057669581, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
+  - {fileID: 1373162020, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
+  - {fileID: -70014241, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
+  - {fileID: -2057669581, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
+  WalkFramesRight:
+  - {fileID: -432938143, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
+  - {fileID: 1697259417, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
+  - {fileID: 1110699694, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
+  - {fileID: -432938143, guid: f913b068b76b7754d9a530cb808b6003, type: 3}
+  WallColor: {r: 0.27672952, g: 0.27672952, b: 0.27672952, a: 1}
   EmptyColor: {r: 1, g: 1, b: 1, a: 0}
-  BlueColor: {r: 0.27, g: 0.52, b: 0.9, a: 1}
-  YellowColor: {r: 0.98, g: 0.84, b: 0.2, a: 1}
-  StarColor: {r: 1, g: 0.72, b: 0.1, a: 1}
-  RedLockColor: {r: 0.85, g: 0.22, b: 0.22, a: 1}
-  RedOpenColor: {r: 0.22, g: 0.8, b: 0.22, a: 1}
+  BlueColor: {r: 1, g: 1, b: 1, a: 1}
+  YellowColor: {r: 1, g: 1, b: 1, a: 1}
+  StarColor: {r: 1, g: 0.8968161, b: 0.40566027, a: 1}
+  RedLockColor: {r: 1, g: 1, b: 1, a: 1}
+  RedOpenColor: {r: 1, g: 1, b: 1, a: 1}
   PlayerColor: {r: 1, g: 1, b: 1, a: 1}
-  HeldBubbleColor: {r: 0.2, g: 0.8, b: 1, a: 1}
+  HeldBubbleColor: {r: 1, g: 1, b: 1, a: 1}
   ContentPanelColor: {r: 1, g: 1, b: 1, a: 0}
   FloorTokenColor: {r: 1, g: 0.85566986, b: 0, a: 1}
   FacingMarkerColor: {r: 1, g: 0.9, b: 0.3, a: 0.75}
@@ -45,7 +69,8 @@ MonoBehaviour:
   ContentPanelScale: 0.9
   ContentLabelCharSize: 0.09
   FloorTokenScale: 0.7
-  FloorLabelCharSize: 0.09
+  FloorLabelCharSize: 0.1
+  LabelFont: {fileID: 12800000, guid: 2123956dee3359747892625675a1c024, type: 3}
   LabelFontSize: 100
   MoveDuration: 0.12
   MoveCurve:
@@ -72,3 +97,4 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  WalkFrameDuration: 0.05

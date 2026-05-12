@@ -10,26 +10,31 @@ namespace KNLVN.Game
     /// </summary>
     public class LevelManager : Singleton<LevelManager>
     {
-        // ─── Settings ─────────────────────────────────────────────────────────
-        [SerializeField] private float _cellSize = 1f;
+        // ─── Level list (assign all levels in order in Inspector) ─────────────
+        [Header("Level Playlist")]
+        [Tooltip("All levels in play order. LevelManager starts at index 0 on Awake.")]
+        [SerializeField] private LevelData[] _levels;
 
         [Header("Debug")]
         [Tooltip("Hiện text tọa độ và đường kẻ ô lưới (CodeMonkey debug). Tắt khi play thật.")]
         [SerializeField] private bool _showDebugGrid = false;
 
         // ─── Dependencies (assign in Inspector) ───────────────────────────────
-        [SerializeField] private LevelData         _levelData;
+        [SerializeField] private float _cellSize = 1f;
         [SerializeField] private EventBusComponent _eventBus;
 
         // ─── Runtime state ────────────────────────────────────────────────────
-        public GameGrid  Grid         { get; private set; }
-        public LevelData CurrentLevel { get; private set; }
+        public GameGrid  Grid              { get; private set; }
+        public LevelData CurrentLevel      { get; private set; }
+        public int       CurrentLevelIndex { get; private set; } = 0;
+        public int       LevelCount        => _levels != null ? _levels.Length : 0;
+        public bool      HasNextLevel      => CurrentLevelIndex < LevelCount - 1;
 
         // ─── Unity lifecycle ──────────────────────────────────────────────────
 
         private void Awake()
         {
-            LoadLevel(_levelData);
+            LoadLevelByIndex(0);
         }
 
         // ─── Public API ───────────────────────────────────────────────────────
@@ -46,8 +51,35 @@ namespace KNLVN.Game
             CurrentLevel = data;
             Grid = BuildGrid(data);
 
-            _eventBus?.Publish(new LevelLoadedEvent { Data = data });
-            Debug.Log($"[LevelManager] Level loaded: {data.name} ({data.Width}×{data.Height})");
+            _eventBus?.Publish(new LevelLoadedEvent { Data = data, LevelIndex = CurrentLevelIndex });
+            Debug.Log($"[LevelManager] Level loaded: {data.name} (index {CurrentLevelIndex})");
+        }
+
+        /// <summary>Load level by index in the Levels playlist.</summary>
+        public void LoadLevelByIndex(int index)
+        {
+            if (_levels == null || _levels.Length == 0)
+            {
+                Debug.LogError("[LevelManager] No levels assigned in the Levels array.");
+                return;
+            }
+            CurrentLevelIndex = Mathf.Clamp(index, 0, _levels.Length - 1);
+            LoadLevel(_levels[CurrentLevelIndex]);
+        }
+
+        /// <summary>
+        /// Advances to the next level in the playlist.
+        /// Fires <see cref="AllLevelsCompleteEvent"/> when all levels are done.
+        /// </summary>
+        public void LoadNextLevel()
+        {
+            if (HasNextLevel)
+                LoadLevelByIndex(CurrentLevelIndex + 1);
+            else
+            {
+                Debug.Log("[LevelManager] All levels complete!");
+                _eventBus?.Publish(new AllLevelsCompleteEvent { TotalLevels = LevelCount });
+            }
         }
 
         /// <summary>Rebuild the grid from the same level (full reset).</summary>

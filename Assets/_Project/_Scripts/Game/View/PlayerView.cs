@@ -37,11 +37,13 @@ namespace KNLVN.Game
         // ─── Animation state ─────────────────────────────────────────────────
         private Coroutine _moveCoroutine;
         private Coroutine _walkCoroutine;
+        private Coroutine _popupCoroutine;
 
         // ─── Cached event handlers ────────────────────────────────────────────
         private System.Action<LevelLoadedEvent>         _onLevelLoaded;
         private System.Action<LevelResetEvent>          _onLevelReset;
         private System.Action<UndoPerformedEvent>       _onUndoPerformed;
+        private System.Action<EquationSolvedEvent>      _onEquationSolved;
 
         // ─── Unity lifecycle ──────────────────────────────────────────────────
 
@@ -62,6 +64,8 @@ namespace KNLVN.Game
                 RefreshFacingSprite();
                 UpdateFacingMarker();
             };
+
+            _onEquationSolved = evt => ShowEquationPopup(evt.EquationText);
         }
 
         private void OnEnable()
@@ -71,6 +75,7 @@ namespace KNLVN.Game
             _eventBus?.Subscribe<PlayerMovedEvent>(OnPlayerMoved);
             _eventBus?.Subscribe<PlayerHeldItemChangedEvent>(OnHeldItemChanged);
             _eventBus?.Subscribe(_onUndoPerformed);
+            _eventBus?.Subscribe(_onEquationSolved);
         }
 
         private void OnDisable()
@@ -80,9 +85,11 @@ namespace KNLVN.Game
             _eventBus?.Unsubscribe<PlayerMovedEvent>(OnPlayerMoved);
             _eventBus?.Unsubscribe<PlayerHeldItemChangedEvent>(OnHeldItemChanged);
             _eventBus?.Unsubscribe(_onUndoPerformed);
+            _eventBus?.Unsubscribe(_onEquationSolved);
 
-            if (_moveCoroutine != null) { StopCoroutine(_moveCoroutine); _moveCoroutine = null; }
-            if (_walkCoroutine != null) { StopCoroutine(_walkCoroutine); _walkCoroutine = null; }
+            if (_moveCoroutine  != null) { StopCoroutine(_moveCoroutine);  _moveCoroutine  = null; }
+            if (_walkCoroutine  != null) { StopCoroutine(_walkCoroutine);  _walkCoroutine  = null; }
+            if (_popupCoroutine != null) { StopCoroutine(_popupCoroutine); _popupCoroutine = null; }
         }
 
         // ─── Event handlers ───────────────────────────────────────────────────
@@ -190,6 +197,25 @@ namespace KNLVN.Game
             _sprite.sprite = _visualConfig.GetPlayerSprite(_player.Facing);
         }
 
+        // ─── Equation popup ───────────────────────────────────────────────────
+
+        /// <summary>
+        /// Spawns a floating text label above the player showing the solved equation.
+        /// Uses the SimplePool system to handle rapid spawning (spamming).
+        /// </summary>
+        private void ShowEquationPopup(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return;
+
+            Vector3 spawnPos = transform.position + new Vector3(0f, 1.2f, -0.5f);
+            EquationPopup popup = SimplePool.Spawn<EquationPopup>(PoolType.EquationPopup, spawnPos, Quaternion.identity);
+            
+            if (popup != null)
+            {
+                popup.Setup(text, _visualConfig?.LabelFont, _visualConfig != null ? _visualConfig.LabelFontSize : 100);
+            }
+        }
+
         // ─── Facing-cell marker ───────────────────────────────────────────────
 
         private void UpdateFacingMarker()
@@ -258,6 +284,7 @@ namespace KNLVN.Game
             float bubbleScale  = cfg != null ? cfg.BubbleScale          : 0.45f;
             float heldCharSize = cfg != null ? cfg.HeldLabelCharSize    : 0.216f;
             int   fontSize     = cfg != null ? cfg.LabelFontSize        : 100;
+            Font  font         = cfg?.LabelFont;
             Color markerColor  = cfg != null ? cfg.FacingMarkerColor    : new Color(1.00f, 0.90f, 0.30f, 0.75f);
 
             // ── Player body ───────────────────────────────────────────────────
@@ -286,12 +313,14 @@ namespace KNLVN.Game
             labelGo.transform.localPosition = new Vector3(0f, 0f, -0.1f);
 
             _heldLabel               = labelGo.AddComponent<TextMesh>();
+            if (font != null) _heldLabel.font = font;
             _heldLabel.characterSize = heldCharSize;
             _heldLabel.fontSize      = fontSize;
             _heldLabel.anchor        = TextAnchor.MiddleCenter;
             _heldLabel.alignment     = TextAlignment.Center;
             _heldLabel.color         = Color.white;
             _heldLabel.fontStyle     = FontStyle.Bold;
+            if (font != null) labelGo.GetComponent<MeshRenderer>().material = font.material;
             labelGo.GetComponent<MeshRenderer>().sortingOrder = 13;
 
             _bubble.SetActive(false);
