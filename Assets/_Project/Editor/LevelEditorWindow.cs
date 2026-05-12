@@ -48,7 +48,7 @@ namespace KNLVN.Editor
 
         // Valid content values
         private static readonly string[] ContentOptions =
-            { "", "0","1","2","3","4","5","6","7","8","9","+","-","*","/","=" };
+            { "", "0","1","2","3","4","5","6","7","8","9","+","-","x","/","=" };
 
         // ─── Scroll / zoom ────────────────────────────────────────────────────
         private Vector2 _scroll;
@@ -242,7 +242,7 @@ namespace KNLVN.Editor
             // Content label
             if (!string.IsNullOrEmpty(ct))
             {
-                string label = (type == CellType.Star) ? $"{ct}×2" : ct;
+                string label = (type == CellType.Star) ? $"{ct}x2" : ct;
                 GUI.Label(rect, label,
                     CenteredStyle(type == CellType.Wall ? Color.gray : Color.white, 16, FontStyle.Bold));
             }

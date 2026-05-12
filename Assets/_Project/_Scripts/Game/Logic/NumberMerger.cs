@@ -97,7 +97,7 @@ namespace KNLVN.Game
             TokenKind.Number   => NumericValue.ToString() + (HasStar ? "★" : ""),
             TokenKind.Plus     => "+",
             TokenKind.Minus    => "-",
-            TokenKind.Multiply => "*",
+            TokenKind.Multiply => "x",
             TokenKind.Divide   => "/",
             TokenKind.Equals   => "=",
             _                  => "?"

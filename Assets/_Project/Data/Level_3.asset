@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f2ae05f64e2c9445b97dd57bdbd2874, type: 3}
-  m_Name: Level_1
+  m_Name: Level_3
   m_EditorClassIdentifier: Assembly-CSharp::KNLVN.Game.LevelData
-  Width: 11
-  Height: 10
-  PlayerStartPos: {x: 5, y: 8}
+  Width: 13
+  Height: 9
+  PlayerStartPos: {x: 2, y: 7}
   Cells:
   - Pos: {x: 0, y: 0}
     Type: 1
@@ -43,140 +43,161 @@ MonoBehaviour:
   - Pos: {x: 0, y: 8}
     Type: 1
     Content: 
-  - Pos: {x: 0, y: 9}
-    Type: 1
-    Content: 
   - Pos: {x: 1, y: 0}
     Type: 1
     Content: 
+  - Pos: {x: 1, y: 2}
+    Type: 1
+    Content: 
   - Pos: {x: 1, y: 5}
-    Type: 0
-    Content: x
-  - Pos: {x: 1, y: 9}
+    Type: 1
+    Content: 
+  - Pos: {x: 1, y: 8}
     Type: 1
     Content: 
   - Pos: {x: 2, y: 0}
     Type: 1
     Content: 
-  - Pos: {x: 2, y: 4}
-    Type: 0
-    Content: 3
-  - Pos: {x: 2, y: 9}
+  - Pos: {x: 2, y: 2}
+    Type: 1
+    Content: 
+  - Pos: {x: 2, y: 3}
+    Type: 3
+    Content: 
+  - Pos: {x: 2, y: 5}
+    Type: 3
+    Content: 
+  - Pos: {x: 2, y: 6}
+    Type: 3
+    Content: 
+  - Pos: {x: 2, y: 8}
     Type: 1
     Content: 
   - Pos: {x: 3, y: 0}
     Type: 1
     Content: 
-  - Pos: {x: 3, y: 3}
+  - Pos: {x: 3, y: 2}
     Type: 1
     Content: 
-  - Pos: {x: 3, y: 4}
-    Type: 3
-    Content: 
-  - Pos: {x: 3, y: 6}
+  - Pos: {x: 3, y: 5}
     Type: 1
     Content: 
-  - Pos: {x: 3, y: 7}
-    Type: 3
-    Content: 
-  - Pos: {x: 3, y: 9}
+  - Pos: {x: 3, y: 8}
     Type: 1
     Content: 
   - Pos: {x: 4, y: 0}
     Type: 1
     Content: 
-  - Pos: {x: 4, y: 6}
+  - Pos: {x: 4, y: 1}
     Type: 1
     Content: 
-  - Pos: {x: 4, y: 9}
+  - Pos: {x: 4, y: 2}
+    Type: 1
+    Content: 
+  - Pos: {x: 4, y: 3}
+    Type: 3
+    Content: 
+  - Pos: {x: 4, y: 5}
+    Type: 1
+    Content: 
+  - Pos: {x: 4, y: 7}
+    Type: 1
+    Content: 
+  - Pos: {x: 4, y: 8}
     Type: 1
     Content: 
   - Pos: {x: 5, y: 0}
     Type: 1
     Content: 
   - Pos: {x: 5, y: 1}
-    Type: 2
-    Content: 2
-  - Pos: {x: 5, y: 3}
     Type: 1
     Content: 
   - Pos: {x: 5, y: 5}
-    Type: 3
-    Content: 
-  - Pos: {x: 5, y: 6}
     Type: 1
     Content: 
-  - Pos: {x: 5, y: 9}
+  - Pos: {x: 5, y: 7}
+    Type: 1
+    Content: 
+  - Pos: {x: 5, y: 8}
     Type: 1
     Content: 
   - Pos: {x: 6, y: 0}
     Type: 1
     Content: 
-  - Pos: {x: 6, y: 6}
+  - Pos: {x: 6, y: 5}
     Type: 1
     Content: 
-  - Pos: {x: 6, y: 9}
+  - Pos: {x: 6, y: 7}
+    Type: 1
+    Content: 
+  - Pos: {x: 6, y: 8}
     Type: 1
     Content: 
   - Pos: {x: 7, y: 0}
     Type: 1
     Content: 
-  - Pos: {x: 7, y: 3}
-    Type: 1
-    Content: 
-  - Pos: {x: 7, y: 4}
-    Type: 3
-    Content: 
-  - Pos: {x: 7, y: 6}
+  - Pos: {x: 7, y: 5}
     Type: 1
     Content: 
   - Pos: {x: 7, y: 7}
-    Type: 3
+    Type: 1
     Content: 
-  - Pos: {x: 7, y: 9}
+  - Pos: {x: 7, y: 8}
     Type: 1
     Content: 
   - Pos: {x: 8, y: 0}
     Type: 1
     Content: 
+  - Pos: {x: 8, y: 3}
+    Type: 1
+    Content: 
   - Pos: {x: 8, y: 4}
-    Type: 0
-    Content: 6
-  - Pos: {x: 8, y: 9}
+    Type: 2
+    Content: 3
+  - Pos: {x: 8, y: 5}
+    Type: 1
+    Content: 
+  - Pos: {x: 8, y: 7}
+    Type: 1
+    Content: 
+  - Pos: {x: 8, y: 8}
     Type: 1
     Content: 
   - Pos: {x: 9, y: 0}
     Type: 1
     Content: 
-  - Pos: {x: 9, y: 5}
+  - Pos: {x: 9, y: 3}
     Type: 0
     Content: =
-  - Pos: {x: 9, y: 8}
-    Type: 4
+  - Pos: {x: 9, y: 4}
+    Type: 0
+    Content: '-'
+  - Pos: {x: 9, y: 5}
+    Type: 0
+    Content: 9
+  - Pos: {x: 9, y: 7}
+    Type: 1
     Content: 
-  - Pos: {x: 9, y: 9}
+  - Pos: {x: 9, y: 8}
     Type: 1
     Content: 
   - Pos: {x: 10, y: 0}
     Type: 1
     Content: 
   - Pos: {x: 10, y: 1}
-    Type: 1
-    Content: 
-  - Pos: {x: 10, y: 2}
-    Type: 1
+    Type: 4
     Content: 
   - Pos: {x: 10, y: 3}
     Type: 1
     Content: 
   - Pos: {x: 10, y: 4}
-    Type: 1
-    Content: 
+    Type: 0
+    Content: 2
   - Pos: {x: 10, y: 5}
     Type: 1
     Content: 
   - Pos: {x: 10, y: 6}
-    Type: 1
+    Type: 3
     Content: 
   - Pos: {x: 10, y: 7}
     Type: 1
@@ -184,6 +205,51 @@ MonoBehaviour:
   - Pos: {x: 10, y: 8}
     Type: 1
     Content: 
-  - Pos: {x: 10, y: 9}
+  - Pos: {x: 11, y: 0}
+    Type: 1
+    Content: 
+  - Pos: {x: 11, y: 1}
+    Type: 1
+    Content: 
+  - Pos: {x: 11, y: 2}
+    Type: 1
+    Content: 
+  - Pos: {x: 11, y: 3}
+    Type: 1
+    Content: 
+  - Pos: {x: 11, y: 4}
+    Type: 0
+    Content: 1
+  - Pos: {x: 11, y: 7}
+    Type: 1
+    Content: 
+  - Pos: {x: 11, y: 8}
+    Type: 1
+    Content: 
+  - Pos: {x: 12, y: 0}
+    Type: 1
+    Content: 
+  - Pos: {x: 12, y: 1}
+    Type: 1
+    Content: 
+  - Pos: {x: 12, y: 2}
+    Type: 1
+    Content: 
+  - Pos: {x: 12, y: 3}
+    Type: 1
+    Content: 
+  - Pos: {x: 12, y: 4}
+    Type: 1
+    Content: 
+  - Pos: {x: 12, y: 5}
+    Type: 1
+    Content: 
+  - Pos: {x: 12, y: 6}
+    Type: 1
+    Content: 
+  - Pos: {x: 12, y: 7}
+    Type: 1
+    Content: 
+  - Pos: {x: 12, y: 8}
     Type: 1
     Content: 

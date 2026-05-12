@@ -16,7 +16,7 @@ MonoBehaviour:
   EmptySprite: {fileID: -8755219989183515707, guid: cd65702630838554fb467f711c0fb1c5, type: 3}
   BlueSprite: {fileID: 5606932991186246490, guid: f0222175aca943f46b73fca564745e75, type: 3}
   YellowSprite: {fileID: -3032914584617769120, guid: 037646685f5f6404481f0fe79d7d403a, type: 3}
-  StarSprite: {fileID: -2866961925152162486, guid: 3336b4877df2c17459a3214232386ce5, type: 3}
+  StarSprite: {fileID: 474030537017708500, guid: de99618ead033d348ba1ded86d474354, type: 3}
   RedLockedSprite: {fileID: -930239667975947347, guid: 446658f5113dbc241996eb2fa74572e6, type: 3}
   RedOpenSprite: {fileID: -3997056024156319402, guid: 47e901dc94ff36546848f28672d40860, type: 3}
   ContentPanelSprite: {fileID: 1944279100, guid: f913b068b76b7754d9a530cb808b6003, type: 3}

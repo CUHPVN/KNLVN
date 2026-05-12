@@ -17,13 +17,13 @@ namespace KNLVN.Game
         // ─── Operator token strings ───────────────────────────────────────────
         public const string TokenPlus    = "+";
         public const string TokenMinus   = "-";
-        public const string TokenMul     = "*";
+        public const string TokenMul     = "x";
         public const string TokenDiv     = "/";
         public const string TokenEquals  = "=";
 
         // ─── Fields ──────────────────────────────────────────────────────────
 
-        /// <summary>Raw string value: "0"–"9", "+", "-", "*", "/", "=".</summary>
+        /// <summary>Raw string value: "0"–"9", "+", "-", "x", "/", "=".</summary>
         public readonly string RawValue;
 
         // ─── Derived properties ───────────────────────────────────────────────

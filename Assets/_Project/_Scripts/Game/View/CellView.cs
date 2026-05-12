@@ -98,11 +98,8 @@ namespace KNLVN.Game
             _contentPanel.gameObject.SetActive(hasContent);
             if (hasContent)
             {
-                bool isStar = cell.IsStar;
-                _contentLabel.text          = isStar ? $"{cell.Content.RawValue}×2" : cell.Content.RawValue;
-                // Star label is longer → scale down to 70% so it fits the same panel
-                float baseCharSize          = _cfg != null ? _cfg.ContentLabelCharSize : 0.154f;
-                _contentLabel.characterSize = isStar ? baseCharSize * 0.7f : baseCharSize;
+                _contentLabel.text          = cell.Content.RawValue;
+                _contentLabel.characterSize = _cfg != null ? _cfg.ContentLabelCharSize : 0.154f;
             }
 
             // Layer 3+4: floor item token

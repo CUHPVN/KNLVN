@@ -31,7 +31,7 @@ namespace KNLVN.Game
         public Vector2Int Pos;
         public CellType   Type;
         /// <summary>
-        /// Raw content string: "0"–"9", "+", "-", "*", "/", "=", or blank.
+        /// Raw content string: "0"–"9", "+", "-", "x", "/", "=", or blank.
         /// For Yellow/Star cells this is their starting content (optional).
         /// </summary>
         public string     Content;

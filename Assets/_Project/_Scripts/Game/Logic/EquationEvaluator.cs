@@ -12,7 +12,7 @@ namespace KNLVN.Game
     ///   2. Walk that axis to collect the contiguous chain that includes every Blue cell.
     ///   3. Chain must contain exactly one "=" token.
     ///   4. Run <see cref="NumberMerger"/> on the chain.
-    ///   5. Split at "=" → evaluate left side and right side with standard precedence.
+    ///   5. Split at "=" → evaluate left side and right side with standard precedence (x, / before +, -).
     ///   6. Return true iff left == right (integer arithmetic).
     /// </summary>
     public class EquationEvaluator
@@ -222,7 +222,7 @@ namespace KNLVN.Game
             return true;
         }
 
-        // ─── Arithmetic evaluation (with * / before + -) ─────────────────────
+        // ─── Arithmetic evaluation (with x / before + -) ─────────────────────
 
         /// <summary>
         /// Evaluates a list of tokens (no "=" present) using standard precedence.
@@ -233,7 +233,7 @@ namespace KNLVN.Game
             result = 0;
             if (tokens.Count == 0) return false;
 
-            // First pass: handle * and /
+            // First pass: handle x and /
             var pass1 = new List<MergedToken>(tokens);
             int i = 1;
             while (i < pass1.Count)

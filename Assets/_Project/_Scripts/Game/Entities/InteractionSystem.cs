@@ -52,6 +52,15 @@ namespace KNLVN.Game
                 return true;
             }
 
+            // ── Priority 4: drop held item to floor the player is standing on ─
+            if (!heldItem.IsEmpty && playerCell != null && !playerCell.HasFloorItem)
+            {
+                playerCell.SetFloorItem(heldItem);
+                heldItem = CellContent.Empty;
+                Debug.Log($"[Interaction] Dropped {playerCell.FloorItem} to floor at {playerPos}");
+                return true;
+            }
+
             Debug.Log("[Interaction] No interaction target.");
             return false;
         }

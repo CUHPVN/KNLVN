@@ -41,9 +41,27 @@ namespace KNLVN.Game
         public Sprite HeldBubbleSprite;
 
         [Header("Player Sprite")]
+        [Tooltip("Default player sprite used when a directional sprite is not assigned.")]
         public Sprite PlayerBodySprite;
+
+        [Header("Player Directional Sprites (leave null to fall back to PlayerBodySprite)")]
+        public Sprite PlayerSpriteDown;
+        public Sprite PlayerSpriteUp;
+        public Sprite PlayerSpriteLeft;
+        public Sprite PlayerSpriteRight;
+
         [Tooltip("Sprite for the corner-bracket marker shown on the cell the player faces. Leave null for procedural brackets.")]
         public Sprite FacingMarkerSprite;
+
+        [Header("Player Walk Animation Frames (per direction)")]
+        [Tooltip("Walk cycle frames facing Down. Leave empty = no animation, just idle sprite.")]
+        public Sprite[] WalkFramesDown;
+        [Tooltip("Walk cycle frames facing Up.")]
+        public Sprite[] WalkFramesUp;
+        [Tooltip("Walk cycle frames facing Left.")]
+        public Sprite[] WalkFramesLeft;
+        [Tooltip("Walk cycle frames facing Right.")]
+        public Sprite[] WalkFramesRight;
 
         // ─── Colors ───────────────────────────────────────────────────────────
 
@@ -120,6 +138,9 @@ namespace KNLVN.Game
         [Tooltip("Easing curve applied to box-push and player-move animations.")]
         public AnimationCurve MoveCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
+        [Tooltip("Seconds each walk frame is displayed. Should be <= MoveDuration / frame count.")]
+        [Range(0.02f, 0.3f)] public float WalkFrameDuration = 0.06f;
+
         // ─── Runtime sprite getters (generate if not assigned) ────────────────
 
         public Sprite GetBgSprite(CellType type, bool doorOpen)
@@ -159,8 +180,38 @@ namespace KNLVN.Game
         public Sprite GetFloorTileSprite() =>
             FloorTileSprite == null ? SpriteFactory.CreateFloorTile() : FloorTileSprite;
 
-        public Sprite GetPlayerSprite() =>
-            PlayerBodySprite == null ? SpriteFactory.CreateCircle(64) : PlayerBodySprite;
+        /// <summary>Returns the correct player sprite for the given facing direction.
+        /// Falls back to <see cref="PlayerBodySprite"/> (or a procedural circle) if
+        /// the directional sprite is not assigned.</summary>
+        public Sprite GetPlayerSprite(FacingDirection facing)
+        {
+            Sprite directional = facing switch
+            {
+                FacingDirection.Down  => PlayerSpriteDown,
+                FacingDirection.Up    => PlayerSpriteUp,
+                FacingDirection.Left  => PlayerSpriteLeft,
+                FacingDirection.Right => PlayerSpriteRight,
+                _                     => null
+            };
+            if (directional != null) return directional;
+            return PlayerBodySprite != null ? PlayerBodySprite : SpriteFactory.CreateCircle(64);
+        }
+
+        /// <summary>Overload with no direction — used during initial build before facing is known.</summary>
+        public Sprite GetPlayerSprite() => GetPlayerSprite(FacingDirection.Down);
+
+        /// <summary>
+        /// Returns the walk-cycle frame array for the given direction.
+        /// Returns null (or empty) when no frames are assigned — caller should fall back to idle sprite.
+        /// </summary>
+        public Sprite[] GetWalkFrames(FacingDirection facing) => facing switch
+        {
+            FacingDirection.Down  => WalkFramesDown,
+            FacingDirection.Up    => WalkFramesUp,
+            FacingDirection.Left  => WalkFramesLeft,
+            FacingDirection.Right => WalkFramesRight,
+            _                     => null
+        };
 
         public Color GetHeldBubbleColor() => HeldBubbleColor;
 

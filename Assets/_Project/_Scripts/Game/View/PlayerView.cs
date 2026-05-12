@@ -36,6 +36,7 @@ namespace KNLVN.Game
 
         // ─── Animation state ─────────────────────────────────────────────────
         private Coroutine _moveCoroutine;
+        private Coroutine _walkCoroutine;
 
         // ─── Cached event handlers ────────────────────────────────────────────
         private System.Action<LevelLoadedEvent>         _onLevelLoaded;
@@ -58,6 +59,7 @@ namespace KNLVN.Game
                 if (grid == null || _player == null) return;
                 Vector3 target = GridToWorld(grid, _player.GridPos);
                 AnimateMove(transform.position, target);
+                RefreshFacingSprite();
                 UpdateFacingMarker();
             };
         }
@@ -80,6 +82,7 @@ namespace KNLVN.Game
             _eventBus?.Unsubscribe(_onUndoPerformed);
 
             if (_moveCoroutine != null) { StopCoroutine(_moveCoroutine); _moveCoroutine = null; }
+            if (_walkCoroutine != null) { StopCoroutine(_walkCoroutine); _walkCoroutine = null; }
         }
 
         // ─── Event handlers ───────────────────────────────────────────────────
@@ -91,6 +94,7 @@ namespace KNLVN.Game
 
             Vector3 target = GridToWorld(grid, evt.NewPos);
             AnimateMove(transform.position, target);
+            PlayWalkAnimation(_player.Facing);
             UpdateFacingMarker();
         }
 
@@ -125,7 +129,65 @@ namespace KNLVN.Game
             _bubble.SetActive(hasItem);
             if (hasItem) _heldLabel.text = _player.HeldItem.RawValue;
 
+            RefreshFacingSprite();
             UpdateFacingMarker();
+        }
+
+        // ─── Walk animation ───────────────────────────────────────────────────
+
+        /// <summary>
+        /// Plays the walk-cycle for <paramref name="facing"/>.
+        /// If no frames are configured, instantly shows the idle directional sprite.
+        /// Runs concurrently with the position MoveRoutine.
+        /// </summary>
+        private void PlayWalkAnimation(FacingDirection facing)
+        {
+            if (_walkCoroutine != null) StopCoroutine(_walkCoroutine);
+
+            var frames = _visualConfig != null ? _visualConfig.GetWalkFrames(facing) : null;
+
+            if (frames == null || frames.Length == 0)
+            {
+                // No walk frames — just snap to idle directional sprite
+                RefreshFacingSprite();
+                return;
+            }
+
+            _walkCoroutine = StartCoroutine(WalkRoutine(frames, facing));
+        }
+
+        private IEnumerator WalkRoutine(Sprite[] frames, FacingDirection facing)
+        {
+            float frameDur = _visualConfig != null ? _visualConfig.WalkFrameDuration : 0.06f;
+            float moveDur  = _visualConfig != null ? _visualConfig.MoveDuration      : 0.12f;
+            float elapsed  = 0f;
+            int   idx      = 0;
+
+            while (elapsed < moveDur)
+            {
+                _sprite.sprite = frames[idx % frames.Length];
+                yield return new WaitForSeconds(frameDur);
+                elapsed += frameDur;
+                idx++;
+            }
+
+            // Return to idle directional sprite when move finishes
+            if (_sprite != null && _visualConfig != null)
+                _sprite.sprite = _visualConfig.GetPlayerSprite(facing);
+
+            _walkCoroutine = null;
+        }
+
+        // ─── Facing sprite ────────────────────────────────────────────────────
+
+        /// <summary>
+        /// Swaps the player body sprite to match the current facing direction.
+        /// Called after every move, snap, and undo.
+        /// </summary>
+        private void RefreshFacingSprite()
+        {
+            if (_sprite == null || _visualConfig == null || _player == null) return;
+            _sprite.sprite = _visualConfig.GetPlayerSprite(_player.Facing);
         }
 
         // ─── Facing-cell marker ───────────────────────────────────────────────

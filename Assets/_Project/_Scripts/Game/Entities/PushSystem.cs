@@ -42,7 +42,8 @@ namespace KNLVN.Game
             if (landingCell.IsBlue)                          return false;
             if (landingCell.IsPushable)                      return false; // can only push 1 at a time
             if (landingCell.IsRed && !doorOpen)              return false; // door is locked
-            if (!targetCell.IsEmptyPushable && landingCell.HasFloorItem) return false; // valued cell can't absorb
+            // A valued box can land on a floor-item cell: the box drops its number to origin
+            // and absorbs the landing floor item (number-swap push). No blocking here.
 
             // ── Execute push ──────────────────────────────────────────────────
             ExecutePush(targetCell, targetPos, landingCell, landingPos);
@@ -55,9 +56,20 @@ namespace KNLVN.Game
             GameGridCell pushedCell,  Vector2Int fromPos,
             GameGridCell landingCell, Vector2Int toPos)
         {
-            // 1. If empty pushable lands on a floor item → absorb the floor item
+            // Track any content that should be dropped to the origin floor
+            CellContent droppedToFloor = CellContent.Empty;
+
+            // 1a. Empty box lands on floor item → absorb the floor item into box
             if (pushedCell.IsEmptyPushable && landingCell.HasFloorItem)
             {
+                pushedCell.SetContent(landingCell.FloorItem);
+                landingCell.ClearFloorItem();
+            }
+            // 1b. Valued box lands on floor item → swap:
+            //     drop box number to origin floor, absorb landing floor item into box
+            else if (!pushedCell.Content.IsEmpty && landingCell.HasFloorItem)
+            {
+                droppedToFloor = pushedCell.Content;
                 pushedCell.SetContent(landingCell.FloorItem);
                 landingCell.ClearFloorItem();
             }
@@ -68,10 +80,13 @@ namespace KNLVN.Game
             _grid.SetCell(newCell);
 
             // 3. Replace the old position with an empty floor cell
+            //    If a number was dropped (swap-push), leave it as a floor item here
             var emptyCell = new GameGridCell(fromPos, CellType.Empty);
+            if (!droppedToFloor.IsEmpty) emptyCell.SetFloorItem(droppedToFloor);
             _grid.SetCell(emptyCell);
 
-            Debug.Log($"[PushSystem] Pushed {pushedCell.CellType} from {fromPos} → {toPos}. Content={newCell.Content}");
+            Debug.Log($"[PushSystem] Pushed {pushedCell.CellType} from {fromPos} → {toPos}. Content={newCell.Content}" +
+                      (droppedToFloor.IsEmpty ? "" : $" | Dropped {droppedToFloor} to floor at {fromPos}"));
         }
     }
 }

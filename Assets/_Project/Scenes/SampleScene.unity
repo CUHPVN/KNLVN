@@ -419,31 +419,6 @@ MonoBehaviour:
   _player: {fileID: 849078252}
   _eventBus: {fileID: 1739647054}
   _visualConfig: {fileID: 11400000, guid: ee853381bfe6fe94da71a89951f65b99, type: 2}
-  _moveCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  _moveDuration: 0.12
 --- !u!1 &1523049615
 GameObject:
   m_ObjectHideFlags: 0
@@ -536,7 +511,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::KNLVN.Game.LevelManager
   _cellSize: 1
   _showDebugGrid: 0
-  _levelData: {fileID: 11400000, guid: ba937c8749cee3a458a63acfd6310400, type: 2}
+  _levelData: {fileID: 11400000, guid: 1b4585ca87e1b6c40aca9930920adb40, type: 2}
   _eventBus: {fileID: 1739647054}
 --- !u!114 &1739647056
 MonoBehaviour:
