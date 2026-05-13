@@ -85,7 +85,7 @@ namespace KNLVN.Game
             if (!droppedToFloor.IsEmpty) emptyCell.SetFloorItem(droppedToFloor);
             _grid.SetCell(emptyCell);
 
-            Debug.Log($"[PushSystem] Pushed {pushedCell.CellType} from {fromPos} → {toPos}. Content={newCell.Content}" +
+            KNLVN.GameDebug.Log($"[PushSystem] Pushed {pushedCell.CellType} from {fromPos} → {toPos}. Content={newCell.Content}" +
                       (droppedToFloor.IsEmpty ? "" : $" | Dropped {droppedToFloor} to floor at {fromPos}"));
         }
     }

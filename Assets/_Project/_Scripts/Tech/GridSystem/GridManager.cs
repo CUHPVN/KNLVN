@@ -26,7 +26,7 @@ public class GridManager : MonoBehaviour
     {
         if (gridBackgroundTexture == null)
         {
-            Debug.LogError("Grid Background Texture is not assigned!");
+            KNLVN.GameDebug.LogError("Grid Background Texture is not assigned!");
             return;
         }
         
@@ -85,14 +85,14 @@ public class GridManager : MonoBehaviour
         Shader gridShader = Shader.Find("Custom/GridBackground");
         if (gridShader == null)
         {
-            Debug.LogError("GridBackground shader not found! Make sure the shader is in the Shaders folder.");
+            KNLVN.GameDebug.LogError("GridBackground shader not found! Make sure the shader is in the Shaders folder.");
             gridShader = Shader.Find("Standard");
         }
         Material material = new Material(gridShader);
         material.mainTexture = gridBackgroundTexture;
         meshRenderer.material = material;
         
-        Debug.Log("Grid background mesh created successfully!");
+        KNLVN.GameDebug.Log("Grid background mesh created successfully!");
     }
 
     private void Update()

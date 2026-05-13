@@ -60,13 +60,13 @@ namespace KNLVN.Game
 
             if (_lastActionWasUndo)
             {
-                Debug.Log("[UndoSystem] Cannot undo twice in a row.");
+                KNLVN.GameDebug.Log("[UndoSystem] Cannot undo twice in a row.");
                 return false;
             }
 
             if (_history.Count == 0)
             {
-                Debug.Log("[UndoSystem] Nothing to undo.");
+                KNLVN.GameDebug.Log("[UndoSystem] Nothing to undo.");
                 return false;
             }
 

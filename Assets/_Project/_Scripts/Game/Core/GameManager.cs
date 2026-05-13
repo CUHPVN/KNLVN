@@ -38,13 +38,13 @@ namespace KNLVN.Game
 
         private void OnDoorEntered(DoorEnteredEvent evt)
         {
-            Debug.Log($"[GameManager] Level {_levelManager.CurrentLevelIndex} complete! Loading next...");
+            KNLVN.GameDebug.Log($"[GameManager] Level {_levelManager.CurrentLevelIndex} complete! Loading next...");
             _levelManager.LoadNextLevel();
         }
 
         private void OnAllLevelsComplete(AllLevelsCompleteEvent evt)
         {
-            Debug.Log($"[GameManager] All {evt.TotalLevels} levels complete! Show win screen.");
+            KNLVN.GameDebug.Log($"[GameManager] All {evt.TotalLevels} levels complete! Show win screen.");
             // TODO: show win / credits screen
         }
     }

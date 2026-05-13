@@ -138,11 +138,13 @@ namespace KNLVN.Game
                 if (c.GridPos.y > maxY) maxY = c.GridPos.y;
             }
 
-            int startY = ExpandDown(minY, col, isRow: false);
-            int endY   = ExpandUp  (maxY, col, isRow: false);
+            // Expand to include Pushable neighbours above/below the blue extremes
+            int startY = ExpandDown(minY, col, isRow: false); // lowest y (bottom of chain)
+            int endY   = ExpandUp  (maxY, col, isRow: false); // highest y (top of chain)
 
+            // Read TOP → BOTTOM (y decreasing) so the token order matches visual reading order
             var chain = new List<GameGridCell>();
-            for (int y = startY; y <= endY; y++)
+            for (int y = endY; y >= startY; y--)
             {
                 var cell = _grid.GetCell(col, y);
                 if (cell == null || !HasContent(cell)) return null;
@@ -265,7 +267,7 @@ namespace KNLVN.Game
                     if (op.Kind == TokenKind.Multiply) r = a * b;
                     else
                     {
-                        if (b == 0) { Debug.Log("[Evaluator] Division by zero."); return false; }
+                        if (b == 0) { KNLVN.GameDebug.Log("[Evaluator] Division by zero."); return false; }
                         r = a / b;
                     }
 

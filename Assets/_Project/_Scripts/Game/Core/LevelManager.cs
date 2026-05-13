@@ -44,7 +44,7 @@ namespace KNLVN.Game
         {
             if (data == null)
             {
-                Debug.LogError("[LevelManager] LevelData is null.");
+                KNLVN.GameDebug.LogError("[LevelManager] LevelData is null.");
                 return;
             }
 
@@ -52,7 +52,7 @@ namespace KNLVN.Game
             Grid = BuildGrid(data);
 
             _eventBus?.Publish(new LevelLoadedEvent { Data = data, LevelIndex = CurrentLevelIndex });
-            Debug.Log($"[LevelManager] Level loaded: {data.name} (index {CurrentLevelIndex})");
+            KNLVN.GameDebug.Log($"[LevelManager] Level loaded: {data.name} (index {CurrentLevelIndex})");
         }
 
         /// <summary>Load level by index in the Levels playlist.</summary>
@@ -60,7 +60,7 @@ namespace KNLVN.Game
         {
             if (_levels == null || _levels.Length == 0)
             {
-                Debug.LogError("[LevelManager] No levels assigned in the Levels array.");
+                KNLVN.GameDebug.LogError("[LevelManager] No levels assigned in the Levels array.");
                 return;
             }
             CurrentLevelIndex = Mathf.Clamp(index, 0, _levels.Length - 1);
@@ -77,7 +77,7 @@ namespace KNLVN.Game
                 LoadLevelByIndex(CurrentLevelIndex + 1);
             else
             {
-                Debug.Log("[LevelManager] All levels complete!");
+                KNLVN.GameDebug.Log("[LevelManager] All levels complete!");
                 _eventBus?.Publish(new AllLevelsCompleteEvent { TotalLevels = LevelCount });
             }
         }
@@ -87,7 +87,7 @@ namespace KNLVN.Game
         {
             LoadLevel(CurrentLevel);
             _eventBus?.Publish(new LevelResetEvent());
-            Debug.Log("[LevelManager] Level reset.");
+            KNLVN.GameDebug.Log("[LevelManager] Level reset.");
         }
 
         // ─── Private helpers ──────────────────────────────────────────────────
@@ -104,7 +104,7 @@ namespace KNLVN.Game
             {
                 if (!grid.InBounds(def.Pos))
                 {
-                    Debug.LogWarning($"[LevelManager] Cell at {def.Pos} is out of bounds. Skipped.");
+                    KNLVN.GameDebug.LogWarning($"[LevelManager] Cell at {def.Pos} is out of bounds. Skipped.");
                     continue;
                 }
 

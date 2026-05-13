@@ -9,7 +9,7 @@ public static class SimplePool
     {
         if(unit == null)
         {
-            Debug.LogError("Unit = Null");
+            KNLVN.GameDebug.LogError("Unit = Null");
             return;
         }
         if(!poolInstance.ContainsKey(unit.PoolType)||poolInstance[unit.PoolType] == null)
@@ -22,7 +22,7 @@ public static class SimplePool
     public static T Spawn<T>(PoolType poolType,Vector3 pos,Quaternion rot) where T : GameUnit
     {
         if(!poolInstance.ContainsKey(poolType)) {
-            Debug.LogError($"No Contain {poolType}");
+            KNLVN.GameDebug.LogError($"No Contain {poolType}");
             return null;
         }
         return poolInstance[poolType].Spawn(pos, rot) as T;
@@ -31,7 +31,7 @@ public static class SimplePool
     {
         if(!poolInstance.ContainsKey(unit.PoolType))
         {
-            Debug.LogError($"Is Not PreLoad: "+unit.PoolType);
+            KNLVN.GameDebug.LogError($"Is Not PreLoad: "+unit.PoolType);
             return;
         }
         poolInstance[unit.PoolType].Despawn(unit); 
@@ -44,7 +44,7 @@ public static class SimplePool
     {
         if (!poolInstance.ContainsKey(poolType))
         {
-            Debug.LogError($"Is Not PreLoad: " + poolType);
+            KNLVN.GameDebug.LogError($"Is Not PreLoad: " + poolType);
             return;
         }
         poolInstance[poolType].Collect();
@@ -60,7 +60,7 @@ public static class SimplePool
     {
         if (!poolInstance.ContainsKey(poolType))
         {
-            Debug.LogError($"Is Not PreLoad: " + poolType);
+            KNLVN.GameDebug.LogError($"Is Not PreLoad: " + poolType);
             return;
         }
         poolInstance[poolType].Release();
@@ -122,7 +122,7 @@ public class Pool
     public void Release()
     {
         Collect();
-        Debug.Log("Release");
+        KNLVN.GameDebug.Log("Release");
         while(inactives.Count > 0)
         {
             GameObject.Destroy(inactives.Dequeue().gameObject);

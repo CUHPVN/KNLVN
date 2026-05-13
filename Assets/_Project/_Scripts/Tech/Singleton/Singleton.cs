@@ -12,7 +12,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
             if(instance == null) instance = FindAnyObjectByType<T>();
             if (instance == null)
             {
-                //Debug.LogWarning(typeof(T));
+                //KNLVN.GameDebug.LogWarning(typeof(T));
                 //instance = new GameObject(nameof(T)).AddComponent<T>();
             }
             return instance;

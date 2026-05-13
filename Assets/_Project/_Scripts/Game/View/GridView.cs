@@ -91,7 +91,7 @@ namespace KNLVN.Game
             var cfg = _visualConfig;
             if (cfg == null)
             {
-                Debug.LogWarning("[GridView] GameVisualConfig not assigned.");
+                KNLVN.GameDebug.LogWarning("[GridView] GameVisualConfig not assigned.");
                 return;
             }
 
@@ -120,7 +120,7 @@ namespace KNLVN.Game
                 if (cell != null) cell.View = go;
             }
 
-            Debug.Log($"[GridView] Built {_cellViews.Count} cell views.");
+            KNLVN.GameDebug.Log($"[GridView] Built {_cellViews.Count} cell views.");
         }
 
         // ─── Floor background ────────────────────────────────────────────────

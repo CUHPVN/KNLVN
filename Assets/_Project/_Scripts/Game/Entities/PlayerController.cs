@@ -164,7 +164,7 @@ namespace KNLVN.Game
 
             Vector2Int targetPos  = GridPos + dir;
             var targetCell = grid.GetCell(targetPos);
-            //Debug.Log($"[PlayerController] Target cell: {targetCell}, x: {targetPos.x}, y: {targetPos.y}");
+            //KNLVN.GameDebug.Log($"[PlayerController] Target cell: {targetCell}, x: {targetPos.x}, y: {targetPos.y}");
             if (targetCell == null) return;
 
             // ── If target is pushable ─────────────────────────────────────────

@@ -33,7 +33,7 @@ namespace KNLVN.Game
             {
                 heldItem = playerCell.FloorItem;
                 playerCell.ClearFloorItem();
-                Debug.Log($"[Interaction] Picked up floor item: {heldItem} at {playerPos}");
+                KNLVN.GameDebug.Log($"[Interaction] Picked up floor item: {heldItem} at {playerPos}");
                 return true;
             }
 
@@ -48,7 +48,7 @@ namespace KNLVN.Game
             {
                 heldItem = facingCell.FloorItem;
                 facingCell.ClearFloorItem();
-                Debug.Log($"[Interaction] Picked up floor item: {heldItem} from {facingPos}");
+                KNLVN.GameDebug.Log($"[Interaction] Picked up floor item: {heldItem} from {facingPos}");
                 return true;
             }
 
@@ -57,11 +57,11 @@ namespace KNLVN.Game
             {
                 playerCell.SetFloorItem(heldItem);
                 heldItem = CellContent.Empty;
-                Debug.Log($"[Interaction] Dropped {playerCell.FloorItem} to floor at {playerPos}");
+                KNLVN.GameDebug.Log($"[Interaction] Dropped {playerCell.FloorItem} to floor at {playerPos}");
                 return true;
             }
 
-            Debug.Log("[Interaction] No interaction target.");
+            KNLVN.GameDebug.Log("[Interaction] No interaction target.");
             return false;
         }
 
@@ -82,10 +82,10 @@ namespace KNLVN.Game
                 {
                     heldItem = cell.Content;
                     cell.ClearContent();
-                    Debug.Log($"[Interaction] Picked from Yellow/Star at {cell.GridPos}: {heldItem}");
+                    KNLVN.GameDebug.Log($"[Interaction] Picked from Yellow/Star at {cell.GridPos}: {heldItem}");
                     return true;
                 }
-                Debug.Log("[Interaction] Facing empty Yellow/Star with empty hands — no-op.");
+                KNLVN.GameDebug.Log("[Interaction] Facing empty Yellow/Star with empty hands — no-op.");
                 return false;
             }
 
@@ -94,7 +94,7 @@ namespace KNLVN.Game
                 // Place held item onto empty yellow/star
                 cell.SetContent(heldItem);
                 heldItem = CellContent.Empty;
-                Debug.Log($"[Interaction] Placed {cell.Content} onto Yellow/Star at {cell.GridPos}");
+                KNLVN.GameDebug.Log($"[Interaction] Placed {cell.Content} onto Yellow/Star at {cell.GridPos}");
                 return true;
             }
             else
@@ -103,7 +103,7 @@ namespace KNLVN.Game
                 var temp = cell.Content;
                 cell.SetContent(heldItem);
                 heldItem = temp;
-                Debug.Log($"[Interaction] Swapped: now holding {heldItem}, cell has {cell.Content} at {cell.GridPos}");
+                KNLVN.GameDebug.Log($"[Interaction] Swapped: now holding {heldItem}, cell has {cell.Content} at {cell.GridPos}");
                 return true;
             }
         }

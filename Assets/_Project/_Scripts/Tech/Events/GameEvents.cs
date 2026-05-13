@@ -21,7 +21,7 @@ namespace Tech.Events
     }
     private void OnSlotRollComplete(OnSlotRollComplete evt)
     {
-        Debug.Log("Complete");
+        KNLVN.GameDebug.Log("Complete");
     }
         EventBus.Instance.Publish(new OnSlotRollComplete());
 

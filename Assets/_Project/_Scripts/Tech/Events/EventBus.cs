@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
         public EventBus()
         {
-            Debug.Log("EventBus initialized.");
+            KNLVN.GameDebug.Log("EventBus initialized.");
         }
 
         public void Subscribe<T>(Action<T> handler)
@@ -24,7 +24,7 @@ using System.Collections.Generic;
                 }
 
                 _subscribers[type].Add(handler);
-                Debug.Log($"[EventBus] Subscribed: {handler.Method.Name} to {type.Name}");
+                KNLVN.GameDebug.Log($"[EventBus] Subscribed: {handler.Method.Name} to {type.Name}");
             }
         }
 
@@ -37,7 +37,7 @@ using System.Collections.Generic;
                 {
                     if (handlers.Remove(handler))
                     {
-                        Debug.Log($"[EventBus] Unsubscribed: {handler.Method.Name} from {type.Name}");
+                        KNLVN.GameDebug.Log($"[EventBus] Unsubscribed: {handler.Method.Name} from {type.Name}");
                     }
                 }
             }
@@ -58,7 +58,7 @@ using System.Collections.Generic;
                 handlersCopy = new List<Delegate>(handlers);
             }
 
-            Debug.Log($"[EventBus] Publishing: {type.Name}");
+            KNLVN.GameDebug.Log($"[EventBus] Publishing: {type.Name}");
 
             foreach (var handler in handlersCopy)
             {
@@ -68,7 +68,7 @@ using System.Collections.Generic;
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogError($"[EventBus] Error invoking {handler.Method.Name}: {ex.Message}");
+                    KNLVN.GameDebug.LogError($"[EventBus] Error invoking {handler.Method.Name}: {ex.Message}");
                 }
             }
         }
@@ -78,7 +78,7 @@ using System.Collections.Generic;
             lock (_lock)
             {
                 _subscribers.Clear();
-                Debug.Log("[EventBus] Disposed and cleared all subscribers.");
+                KNLVN.GameDebug.Log("[EventBus] Disposed and cleared all subscribers.");
             }
         }
     }

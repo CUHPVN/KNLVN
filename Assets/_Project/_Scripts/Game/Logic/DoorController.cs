@@ -36,7 +36,7 @@ namespace KNLVN.Game
             if (IsOpen) return;
             IsOpen = true;
             _eventBus?.Publish(new DoorOpenedEvent());
-            Debug.Log("[DoorController] Door OPENED.");
+            KNLVN.GameDebug.Log("[DoorController] Door OPENED.");
         }
 
         public void Close()
@@ -44,7 +44,7 @@ namespace KNLVN.Game
             if (!IsOpen) return;
             IsOpen = false;
             _eventBus?.Publish(new DoorClosedEvent());
-            Debug.Log("[DoorController] Door CLOSED.");
+            KNLVN.GameDebug.Log("[DoorController] Door CLOSED.");
         }
     }
 }
