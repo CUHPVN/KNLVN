@@ -51,9 +51,26 @@ namespace KNLVN.Game
             if (!sameRow && !sameColumn) return EvaluationResult.Fail();
 
             // 2. Build the contiguous chain along the detected axis
-            List<GameGridCell> chain = sameRow
-                ? BuildHorizontalChain(blueCells)
-                : BuildVerticalChain(blueCells);
+            List<GameGridCell> chain;
+
+            if (sameRow && sameColumn)
+            {
+                // Ambiguous (e.g. single blue cell) — try both, pick the longer valid chain
+                var hChain = BuildHorizontalChain(blueCells);
+                var vChain = BuildVerticalChain(blueCells);
+
+                // Pick whichever produced a longer valid chain (or the one that isn't null)
+                if (hChain != null && vChain != null)
+                    chain = vChain.Count >= hChain.Count ? vChain : hChain;
+                else
+                    chain = hChain ?? vChain;
+            }
+            else
+            {
+                chain = sameRow
+                    ? BuildHorizontalChain(blueCells)
+                    : BuildVerticalChain(blueCells);
+            }
 
             if (chain == null) return EvaluationResult.Fail();
 
