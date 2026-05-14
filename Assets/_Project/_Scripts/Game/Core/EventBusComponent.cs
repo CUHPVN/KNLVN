@@ -6,14 +6,13 @@ namespace KNLVN.Game
     /// MonoBehaviour wrapper that exposes <see cref="EventBus"/> as a Unity component.
     /// Attach to a persistent GameObject so all other scripts can reference it via Inspector.
     /// </summary>
-    public class EventBusComponent : PersistentSingleton<EventBusComponent>
+    public class EventBusComponent : MonoBehaviour
     {
         private EventBus _bus;
         private EventBus Bus => _bus ??= new EventBus();
 
-        protected override void Awake()
+        private void Awake()
         {
-            base.Awake();
             // Initialize here to ensure it's created early, but lazy init handles earlier accesses
             if (_bus == null) _bus = new EventBus();
         }

@@ -88,6 +88,12 @@ namespace KNLVN.Game
 
         private void Update()
         {
+            if (_levelManager == null || _levelManager.Grid == null)
+                return;
+
+            if (TransitionOverlay.Instance != null && TransitionOverlay.Instance.IsTransitioning)
+                return;
+
             HandleMovementInput();
             HandleInteractionInput();
             HandleUndoInput();
@@ -148,7 +154,11 @@ namespace KNLVN.Game
         private void HandleResetInput()
         {
             if (Keyboard.current?.rKey.wasPressedThisFrame == true)
-                _levelManager.ResetLevel();
+                TransitionOverlay.Instance.PlayTransition(() => 
+                {
+                    if (_levelManager != null)
+                        _levelManager.ResetLevel();
+                });
         }
 
         // ─── Action implementations ───────────────────────────────────────────
@@ -156,21 +166,29 @@ namespace KNLVN.Game
         private void TryMove(Vector2Int dir)
         {
             var grid   = _levelManager.Grid;
-            var facing = FacingDirectionExtensions.FromVector(dir);
-
-            // Always update facing direction
-            bool facingChanged = facing != Facing;
-            Facing = facing;
+            var newFacing = FacingDirectionExtensions.FromVector(dir);
 
             Vector2Int targetPos  = GridPos + dir;
             var targetCell = grid.GetCell(targetPos);
             //KNLVN.GameDebug.Log($"[PlayerController] Target cell: {targetCell}, x: {targetPos.x}, y: {targetPos.y}");
-            if (targetCell == null) return;
+            if (targetCell == null)
+            {
+                if (newFacing != Facing)
+                {
+                    Facing = newFacing;
+                    NotifyPlayerMoved();
+                }
+                return;
+            }
 
             // ── If target is pushable ─────────────────────────────────────────
             if (targetCell.IsPushable)
             {
                 PushSnapshot();
+                
+                bool facingChanged = newFacing != Facing;
+                Facing = newFacing;
+
                 bool pushed = _pushSystem.TryPush(GridPos, dir, _door.IsOpen);
                 if (pushed)
                 {
@@ -190,12 +208,18 @@ namespace KNLVN.Game
             // ── Normal move ───────────────────────────────────────────────────
             if (!targetCell.IsWalkable(_door.IsOpen)) 
             {
+                bool facingChanged = newFacing != Facing;
+                Facing = newFacing;
                 if (facingChanged) NotifyPlayerMoved();
                 return;
             }
 
             PushSnapshot();
+            
+            Facing = newFacing;
             GridPos = targetPos;
+
+            NotifyPlayerMoved();
 
             // Check if player walked onto open door
             if (targetCell.IsRed && _door.IsOpen)
@@ -270,7 +294,6 @@ namespace KNLVN.Game
 
         private void PostAction()
         {
-            NotifyPlayerMoved();
             RefreshEquation();
         }
 
@@ -296,7 +319,6 @@ namespace KNLVN.Game
             _door.ApplyEquationResult(result.IsValid);
             _eventBus?.Publish(new EquationChangedEvent { IsValid = result.IsValid });
 
-            // Fire celebration event only on the FIRST frame the equation becomes valid
             if (result.IsValid && !_lastEquationValid && result.ChainPositions != null)
             {
                 _eventBus?.Publish(new EquationSolvedEvent
@@ -306,6 +328,16 @@ namespace KNLVN.Game
                 });
             }
             _lastEquationValid = result.IsValid;
+
+            // Check if player is already standing on the door when it unlocks
+            if (result.IsValid)
+            {
+                var currentCell = _levelManager.Grid.GetCell(GridPos);
+                if (currentCell != null && currentCell.IsRed)
+                {
+                    _eventBus?.Publish(new DoorEnteredEvent());
+                }
+            }
         }
     }
 }

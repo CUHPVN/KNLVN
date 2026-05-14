@@ -38,8 +38,17 @@ namespace KNLVN.Game
 
         private void OnDoorEntered(DoorEnteredEvent evt)
         {
-            KNLVN.GameDebug.Log($"[GameManager] Level {_levelManager.CurrentLevelIndex} complete! Loading next...");
-            _levelManager.LoadNextLevel();
+            int cleared = _levelManager.CurrentLevelIndex;
+            KNLVN.GameDebug.Log($"[GameManager] Level {cleared} complete! Loading next...");
+
+            // Unlock next level in persistent progress
+            LevelProgressManager.UnlockNextLevel(cleared, _levelManager.LevelCount);
+
+            TransitionOverlay.Instance.PlayTransition(() => 
+            {
+                if (_levelManager != null)
+                    _levelManager.LoadNextLevel();
+            });
         }
 
         private void OnAllLevelsComplete(AllLevelsCompleteEvent evt)

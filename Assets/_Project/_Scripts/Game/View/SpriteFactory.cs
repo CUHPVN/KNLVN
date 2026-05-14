@@ -88,16 +88,10 @@ namespace KNLVN.Game
         public static Sprite CreateDoor(int res = 64)
         {
             var tex = MakeTex(res);
-            float cx = res * .5f;
-            float archTopY = res * .5f, archR = res * .32f, doorHW = res * .22f;
             for (int y = 0; y < res; y++)
             for (int x = 0; x < res; x++)
             {
-                float dx = x + .5f - cx, dy = y + .5f - archTopY;
-                bool opening = y < archTopY
-                    ? (dx * dx + dy * dy < archR * archR && Mathf.Abs(dx) < doorHW)
-                    : Mathf.Abs(dx) < doorHW;
-                tex.SetPixel(x, y, opening ? Color.clear : Color.white);
+                tex.SetPixel(x, y, Color.white);
             }
             tex.Apply();
             return Sprite.Create(tex, new Rect(0, 0, res, res), new Vector2(0.5f, 0.5f), res);

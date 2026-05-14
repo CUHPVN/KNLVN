@@ -10,12 +10,15 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         get
         {
             if(instance == null) instance = FindAnyObjectByType<T>();
-            if (instance == null)
-            {
-                //KNLVN.GameDebug.LogWarning(typeof(T));
-                //instance = new GameObject(nameof(T)).AddComponent<T>();
-            }
             return instance;
         } 
+    }
+
+    protected virtual void OnDestroy()
+    {
+        if (instance == this)
+        {
+            instance = null;
+        }
     }
 }

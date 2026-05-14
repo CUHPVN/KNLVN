@@ -35,6 +35,7 @@ namespace KNLVN.Game
         private System.Action<LevelLoadedEvent>    _onLevelLoaded;
         private System.Action<LevelResetEvent>     _onLevelReset;
         private System.Action<EquationSolvedEvent> _onEquationSolved;
+        private System.Action<PlayerHeldItemChangedEvent> _onHeldItemChanged;
 
         // ─── Unity lifecycle ──────────────────────────────────────────────────
 
@@ -56,6 +57,7 @@ namespace KNLVN.Game
             _onLevelLoaded   = _ => RebuildViews();
             _onLevelReset    = _ => RebuildViews();
             _onEquationSolved = evt => BounceChain(evt.ChainPositions);
+            _onHeldItemChanged = _ => RefreshAllCells();
         }
 
         private void OnEnable()
@@ -65,6 +67,7 @@ namespace KNLVN.Game
             _eventBus?.Subscribe(_onLevelLoaded);
             _eventBus?.Subscribe(_onLevelReset);
             _eventBus?.Subscribe(_onEquationSolved);
+            _eventBus?.Subscribe(_onHeldItemChanged);
         }
 
         private void OnDisable()
@@ -74,6 +77,7 @@ namespace KNLVN.Game
             _eventBus?.Unsubscribe(_onLevelLoaded);
             _eventBus?.Unsubscribe(_onLevelReset);
             _eventBus?.Unsubscribe(_onEquationSolved);
+            _eventBus?.Unsubscribe(_onHeldItemChanged);
         }
 
         // ─── Build ────────────────────────────────────────────────────────────

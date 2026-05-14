@@ -411,7 +411,7 @@ namespace KNLVN.Editor
 
         private void SaveLevel()
         {
-            string defaultName = _loadedAsset != null ? _loadedAsset.name : "Level_New";
+            string defaultName = _loadedAsset != null ? _loadedAsset.name : "Level_";
             string path = EditorUtility.SaveFilePanelInProject(
                 "Save Level", defaultName, "asset",
                 "Choose where to save the LevelData asset.",

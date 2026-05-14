@@ -32,9 +32,9 @@ namespace KNLVN.Game
 
         // ─── Unity lifecycle ──────────────────────────────────────────────────
 
-        private void Awake()
+        private void Start()
         {
-            LoadLevelByIndex(0);
+            LoadLevelByIndex(GameContext.SelectedLevelIndex);
         }
 
         // ─── Public API ───────────────────────────────────────────────────────

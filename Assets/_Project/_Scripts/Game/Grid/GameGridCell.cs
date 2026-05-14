@@ -61,7 +61,7 @@ namespace KNLVN.Game
 
         /// <summary>True when the player can step onto this cell (not wall, not blue).</summary>
         public bool IsWalkable(bool doorOpen) =>
-            !IsWall && !IsBlue && (IsRed ? doorOpen : true);
+            !IsWall && !IsBlue;
 
         // ─── Snapshot (for Undo) ──────────────────────────────────────────────
 
