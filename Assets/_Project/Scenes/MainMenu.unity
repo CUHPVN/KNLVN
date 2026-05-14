@@ -368,8 +368,8 @@ MonoBehaviour:
   _sfxMove: {fileID: 8300000, guid: fe0b1f9aeb45b41b089175aeeabd5d95, type: 3}
   _sfxPush: {fileID: 8300000, guid: d46323e22e74e46baa241cbf48c85671, type: 3}
   _sfxInteract: {fileID: 8300000, guid: ffb159a21c8a04135a5616979c828fab, type: 3}
-  _sfxUndo: {fileID: 8300000, guid: 0c008ee3ee72a4362a35be25fa5de043, type: 3}
-  _sfxEquationSolved: {fileID: 8300000, guid: a0ca8964c08d54c5dbebf245bdc474ca, type: 3}
+  _sfxUndo: {fileID: 8300000, guid: b6428d4edb06344ba829da4edd9967c1, type: 3}
+  _sfxEquationSolved: {fileID: 8300000, guid: 0c008ee3ee72a4362a35be25fa5de043, type: 3}
   _sfxEquationBroken: {fileID: 8300000, guid: 657578e4be6b64dbf9b09deada272e55, type: 3}
   _sfxDoorOpen: {fileID: 8300000, guid: d8d04c6f80a1140db85ede568dab1f51, type: 3}
   _sfxDoorClose: {fileID: 8300000, guid: 5fdb13d3756c84fecac96f5a2d124370, type: 3}
